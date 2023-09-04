@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:to_do_list/Routes/Utils/colors.dart';
-import 'package:to_do_list/Routes/Utils/home_controller.dart';
-import '../Routes/Utils/text.dart';
+import 'package:to_do_list/Routes/routes_name.dart';
+import 'package:to_do_list/Utils/colors.dart';
+import '../Utils/text.dart';
+import 'dashboard.dart';
 
 var selectedDate = DateTime.now().obs;
 var stringDate =
-    '${selectedDate.value.day.toString()} / ${selectedDate.value.month.toString()} / ${selectedDate.value.year.toString()}'
+    '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}'
         .obs;
 TextEditingController titleController = TextEditingController();
 
@@ -16,97 +17,111 @@ class CreateNewTask extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
           child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         physics: const BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                    onPressed: () => Get.back(),
-                    child: textSecondary15('Cancel')),
-              ],
-            ),
-            SizedBox(height: 15.h),
-            textSecondary30w600('Create New Task'),
-            SizedBox(height: 25.h),
-            TextFormField(
-              controller: titleController,
-              autofocus: true,
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                  hintText: 'Task title',
-                  hintStyle: const TextStyle(color: Colors.white54),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: Colors.white60, width: 1))),
-            ),
-            SizedBox(height: 25.h),
-            TextFormField(
-              style: const TextStyle(color: Colors.white),
-              maxLines: 5,
-              decoration: InputDecoration(
-                  hintText: 'Description',
-                  hintStyle: const TextStyle(color: Colors.white54),
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide:
-                          const BorderSide(color: Colors.white60, width: 1))),
-            ),
-            SizedBox(height: 25.h),
-            textWhite20('Select Date'),
-            SizedBox(height: 10.h),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    presentDatePicker(context);
-                  },
-                  child: Obx(
-                    () => Container(
-                        padding: EdgeInsets.all(10.h),
-                        decoration: BoxDecoration(
-                            color: Colors.grey[600],
-                            borderRadius: BorderRadius.circular(10)),
-                        child: textWhite16(stringDate.value)),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () => Get.back(),
+                      child: textSecondary15('Cancel')),
+                ],
+              ),
+              SizedBox(height: 15.h),
+              textSecondary30w600('Create New Task'),
+              SizedBox(height: 25.h),
+              TextFormField(
+                validator: (value) {
+                  if (value == '') {
+                    return 'Please enter title';
+                  }
+                  return null;
+                },
+                controller: titleController,
+                autofocus: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    hintText: 'Task title',
+                    hintStyle: const TextStyle(color: Colors.white54),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Colors.white60, width: 1))),
+              ),
+              SizedBox(height: 25.h),
+              TextFormField(
+                style: const TextStyle(color: Colors.white),
+                maxLines: 5,
+                decoration: InputDecoration(
+                    hintText: 'Description',
+                    hintStyle: const TextStyle(color: Colors.white54),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Colors.white60, width: 1))),
+              ),
+              SizedBox(height: 25.h),
+              textWhite20('Select Date'),
+              SizedBox(height: 10.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      presentDatePicker(context);
+                    },
+                    child: Obx(
+                      () => Container(
+                          padding: EdgeInsets.all(10.h),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[600],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: textWhite16(stringDate.value
+                              //  == '' ? '${DateTime.now()}' : stringDate.value
+                              )),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 35.h),
-            GestureDetector(
-              onTap: () {
-                var titleValue = titleController.text.obs;
-                HomeController().taskData.value =
-                    List.from(HomeController().taskData)..add(titleValue);
-                Get.back();
-                titleController.text = '';
-              },
-              child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(15.h),
-                  decoration: BoxDecoration(
-                      color: Colors.teal,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(child: textWhite20('Create Task'))),
-            )
-          ],
+                ],
+              ),
+              SizedBox(height: 35.h),
+              GestureDetector(
+                onTap: () {
+                  final FormState? form = formKey.currentState;
+                  if (form != null && form.validate()) {
+                    var titleValue = titleController.text.obs;
+                    taskData.value = List.from(taskData)..add(titleValue);
+                    taskDate.value = List.from(taskDate)..add(stringDate.value);
+                    Get.toNamed(RouteName.dashboard);
+                    titleController.text = '';
+                  }
+                },
+                child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(15.h),
+                    decoration: BoxDecoration(
+                        color: Colors.teal,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(child: textWhite20('Create Task'))),
+              )
+            ],
+          ),
         ),
       )),
     );
   }
 
   void presentDatePicker(context) {
-    TextEditingController dateController = TextEditingController();
-
     showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -133,13 +148,8 @@ class CreateNewTask extends StatelessWidget {
         return;
       }
       selectedDate.value = pickedDate;
-      dateController.text =
-          "  ${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}";
+      stringDate.value =
+          "${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}";
     });
   }
 }
-
-
-//  answeredData.value =
-//                                     List.from(answeredData.value)
-//                                       ..add(selectedRadio.value);

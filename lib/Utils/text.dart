@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:to_do_list/Routes/Utils/colors.dart';
+import 'package:to_do_list/Utils/colors.dart';
 
 Widget textSecondary30w600(String text) {
   return Text(
