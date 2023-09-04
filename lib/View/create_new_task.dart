@@ -4,6 +4,11 @@ import 'package:get/get.dart';
 import 'package:to_do_list/Routes/Utils/colors.dart';
 import '../Routes/Utils/text.dart';
 
+var selectedDate = DateTime.now().obs;
+var stringDate =
+    '${selectedDate.value.day.toString()} / ${selectedDate.value.month.toString()} / ${selectedDate.value.year.toString()}'
+        .obs;
+
 class CreateNewTask extends StatelessWidget {
   const CreateNewTask({super.key});
 
@@ -16,49 +21,61 @@ class CreateNewTask extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         physics: const BouncingScrollPhysics(),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextButton(
-                onPressed: () => Get.back(), child: textSecondary15('Cancel')),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                    onPressed: () => Get.back(),
+                    child: textSecondary15('Cancel')),
+              ],
+            ),
             SizedBox(height: 15.h),
             textSecondary30w600('Create New Task'),
             SizedBox(height: 25.h),
             TextFormField(
+              autofocus: true,
+              style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                   hintText: 'Task title',
+                  hintStyle: const TextStyle(color: Colors.white54),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide:
-                          const BorderSide(color: Colors.white12, width: 1))),
+                          const BorderSide(color: Colors.white60, width: 1))),
             ),
             SizedBox(height: 25.h),
             TextFormField(
+              style: const TextStyle(color: Colors.white),
               maxLines: 5,
               decoration: InputDecoration(
                   hintText: 'Description',
+                  hintStyle: const TextStyle(color: Colors.white54),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide:
-                          const BorderSide(color: Colors.white12, width: 1))),
+                          const BorderSide(color: Colors.white60, width: 1))),
             ),
             SizedBox(height: 25.h),
-            textWhite20('Remind me at'),
+            textWhite20('Select Date'),
             SizedBox(height: 10.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                    padding: EdgeInsets.all(10.h),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[600],
-                        borderRadius: BorderRadius.circular(10)),
-                    child: textWhite16('date')),
-                SizedBox(width: 5.w),
-                Container(
-                    padding: EdgeInsets.all(10.h),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[600],
-                        borderRadius: BorderRadius.circular(10)),
-                    child: textWhite16('time'))
+                GestureDetector(
+                  onTap: () {
+                    presentDatePicker(context);
+                  },
+                  child: Obx(
+                    () => Container(
+                        padding: EdgeInsets.all(10.h),
+                        decoration: BoxDecoration(
+                            color: Colors.grey[600],
+                            borderRadius: BorderRadius.circular(10)),
+                        child: textWhite16(stringDate.value)),
+                  ),
+                ),
               ],
             ),
             SizedBox(height: 35.h),
@@ -72,11 +89,45 @@ class CreateNewTask extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.teal,
                       borderRadius: BorderRadius.circular(10)),
-                  child: textWhite20('Create Task')),
+                  child: Center(child: textWhite20('Create Task'))),
             )
           ],
         ),
       )),
     );
+  }
+
+  void presentDatePicker(context) {
+    TextEditingController dateController = TextEditingController();
+
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2050),
+      builder: (context, child) {
+        return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme: const ColorScheme.light(
+                primary: AppColors.primary,
+                onPrimary: Colors.white,
+                onSurface: Colors.black,
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: AppColors.secondary,
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    ).then((pickedDate) {
+      if (pickedDate == null) {
+        return;
+      }
+      selectedDate.value = pickedDate;
+      dateController.text =
+          "  ${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}";
+    });
   }
 }

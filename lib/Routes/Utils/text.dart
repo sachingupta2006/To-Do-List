@@ -12,12 +12,21 @@ Widget textSecondary30w600(String text) {
   );
 }
 
+Widget textWhite16Center(String text) {
+  return Text(
+    text,
+    textAlign: TextAlign.center,
+    style: TextStyle(color: Colors.white, fontSize: 16.sp),
+  );
+}
+
 Widget textWhite16(String text) {
   return Text(
     text,
     style: TextStyle(color: Colors.white, fontSize: 16.sp),
   );
 }
+
 Widget textWhite20(String text) {
   return Text(
     text,
