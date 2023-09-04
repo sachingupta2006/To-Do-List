@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Routes/Utils/colors.dart';
+import 'package:to_do_list/Routes/Utils/home_controller.dart';
 import '../Routes/Utils/text.dart';
 
 var selectedDate = DateTime.now().obs;
 var stringDate =
     '${selectedDate.value.day.toString()} / ${selectedDate.value.month.toString()} / ${selectedDate.value.year.toString()}'
         .obs;
+TextEditingController titleController = TextEditingController();
 
 class CreateNewTask extends StatelessWidget {
   const CreateNewTask({super.key});
@@ -35,6 +37,7 @@ class CreateNewTask extends StatelessWidget {
             textSecondary30w600('Create New Task'),
             SizedBox(height: 25.h),
             TextFormField(
+              controller: titleController,
               autofocus: true,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
@@ -81,7 +84,11 @@ class CreateNewTask extends StatelessWidget {
             SizedBox(height: 35.h),
             GestureDetector(
               onTap: () {
+                var titleValue = titleController.text.obs;
+                HomeController().taskData.value =
+                    List.from(HomeController().taskData)..add(titleValue);
                 Get.back();
+                titleController.text = '';
               },
               child: Container(
                   width: double.infinity,
@@ -131,3 +138,8 @@ class CreateNewTask extends StatelessWidget {
     });
   }
 }
+
+
+//  answeredData.value =
+//                                     List.from(answeredData.value)
+//                                       ..add(selectedRadio.value);

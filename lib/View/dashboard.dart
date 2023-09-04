@@ -82,11 +82,11 @@ class Dashboard extends StatelessWidget {
                                 decoration: BoxDecoration(
                                     color: Colors.grey[600],
                                     borderRadius: BorderRadius.circular(10)),
-                                child: textWhite16('date'));
+                                child: textWhite16(HomeController().taskData[index].toString()));
                           },
                           separatorBuilder: (context, index) =>
                               SizedBox(height: 10.h),
-                          itemCount: 5)),
+                          itemCount: HomeController().taskData.length)),
             ),
           ),
         ),
