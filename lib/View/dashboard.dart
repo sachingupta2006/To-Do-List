@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Routes/routes_name.dart';
+import 'package:to_do_list/View/edit_task.dart';
 import '../Utils/text.dart';
 import 'create_new_task.dart';
 
@@ -31,6 +32,7 @@ class Dashboard extends StatelessWidget {
                     child: textBlue15('Cancel')),
                 GestureDetector(
                     onTap: () {
+                      Get.back();
                       true;
                     },
                     child: textRed15('Confirm')),
@@ -118,7 +120,15 @@ class Dashboard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                      onTap: () => Get.back(), child: textBlue15('Edit Task')),
+                      onTap: () {
+                        // Get.back();
+                        // navigator.push(MaterialPageRoute(builder: (context) => EditTask(index: index),));
+                        Get.to(CreateNewTask(
+                          editTitle: taskData[index].toString(),
+                          editIndex: index,
+                        ));
+                      },
+                      child: textBlue15('Edit Task')),
                   GestureDetector(
                       onTap: () {
                         Get.defaultDialog(

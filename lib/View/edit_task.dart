@@ -1,47 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:to_do_list/Utils/colors.dart';
+import 'package:to_do_list/View/dashboard.dart';
+
 import '../Routes/routes_name.dart';
+import '../Utils/colors.dart';
 import '../Utils/text.dart';
-import 'dashboard.dart';
+import 'create_new_task.dart';
 
-void storeData() async {
-  final prefs = await SharedPreferences.getInstance();
-  final taskDataAsStrings = taskData.map((task) => task.toString()).toList();
-  final taskDateAsStrings = taskDate.map((task) => task.toString()).toList();
-  await prefs.setStringList('items', taskDataAsStrings);
-  await prefs.setStringList('date', taskDateAsStrings);
-}
-
-void addTask(String title, String date) {
-  taskData.add(title);
-  taskDate.add(date);
-  storeData();
-}
-
-void removeTask(int index) {
-  taskData.removeAt(index);
-  taskDate.removeAt(index);
-  storeData();
-}
-
-var selectedDate = DateTime.now().obs;
-var stringDate =
-    '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}'
-        .obs;
-TextEditingController titleController = TextEditingController();
-
-class CreateNewTask extends StatelessWidget {
-  const CreateNewTask({super.key, this.editTitle, this.editIndex});
-  final String? editTitle;
-  final int? editIndex;
+class EditTask extends StatelessWidget {
+  const EditTask({super.key, required this.index});
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+    final TextEditingController editTitleController =
+        TextEditingController(text: '${taskData[index].value}');
     return Scaffold(
       backgroundColor: AppColors.primary,
       body: SafeArea(
@@ -59,21 +34,12 @@ class CreateNewTask extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         Get.toNamed(RouteName.dashboard);
-                        // Get.back();
-                        // Navigator.pop(context);
-
-                        titleController.text = '';
-                        selectedDate.value = DateTime.now();
-                        stringDate.value =
-                            '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
                       },
-
                       child: textSecondary15('Cancel')),
                 ],
               ),
               SizedBox(height: 15.h),
-              textSecondary30w600(
-                  editTitle != null ? 'Update Task' : 'Create New Task'),
+              textSecondary30w600('Update Current Task'),
               SizedBox(height: 25.h),
               TextFormField(
                 validator: (value) {
@@ -82,11 +48,11 @@ class CreateNewTask extends StatelessWidget {
                   }
                   return null;
                 },
-                controller: titleController,
-                autofocus: true,
+                controller: editTitleController,
+                // autofocus: true,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintText: editTitle ?? 'Task title',
+                    hintText: 'Task title',
                     hintStyle: const TextStyle(color: Colors.white54),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -116,36 +82,23 @@ class CreateNewTask extends StatelessWidget {
               ),
               SizedBox(height: 35.h),
               GestureDetector(
-                onTap: () async {
-                  final FormState? form = formKey.currentState;
-                  if (form != null && form.validate()) {
-                    if (editTitle == null) {
-                      var titleValue = titleController.text.obs;
-                      addTask(titleValue.value, stringDate.value);
-                    } else {
-                      var titleValue = titleController.text.obs;
-
-                      taskData[editIndex!] = titleValue.value;
-                      taskDate[editIndex!] = stringDate.value;
-                      storeData();
-                    }
-
-                    Get.toNamed(RouteName.dashboard);
-                    // Get.back();
-                    titleController.text = '';
-                    storeData();
-                  }
-                },
+                // onTap: () async {
+                //   final FormState? form = formKey.currentState;
+                //   if (form != null && form.validate()) {
+                //     var titleValue = titleController.text.obs;
+                //     addTask(titleValue.value, stringDate.value);
+                //     Get.toNamed(RouteName.dashboard);
+                //     titleController.text = '';
+                //     storeData();
+                //   }
+                // },
                 child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(15.h),
                     decoration: BoxDecoration(
                         color: Colors.teal,
                         borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                        child: textWhite20(editTitle != null
-                            ? 'Update Task'
-                            : 'Create Task'))),
+                    child: Center(child: textWhite20('Update Task'))),
               )
             ],
           ),
