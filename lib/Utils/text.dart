@@ -27,6 +27,16 @@ Widget textWhite16(String text) {
   );
 }
 
+Widget textWhite16Line(String text) {
+  return Text(
+    text,
+    style: TextStyle(
+        color: Colors.white,
+        fontSize: 16.sp,
+        decoration: TextDecoration.lineThrough),
+  );
+}
+
 Widget textWhite20(String text) {
   return Text(
     text,
@@ -46,5 +56,18 @@ Widget textSecondary15(String text) {
   return Text(
     text,
     style: TextStyle(color: AppColors.secondary, fontSize: 15.sp),
+  );
+}
+
+Widget textRed15(String text) {
+  return Text(
+    text,
+    style: TextStyle(color: Colors.red, fontSize: 15.sp),
+  );
+}
+Widget textBlue15(String text) {
+  return Text(
+    text,
+    style: TextStyle(color: Colors.blue, fontSize: 15.sp),
   );
 }
