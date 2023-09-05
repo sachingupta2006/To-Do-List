@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:to_do_list/Routes/routes_name.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/Utils/colors.dart';
+import '../Routes/routes_name.dart';
 import '../Utils/text.dart';
 import 'dashboard.dart';
+
+void storeData() async {
+  final prefs = await SharedPreferences.getInstance();
+  final taskDataAsStrings = taskData.map((task) => task.toString()).toList();
+  final taskDateAsStrings = taskDate.map((task) => task.toString()).toList();
+  await prefs.setStringList('items', taskDataAsStrings);
+  await prefs.setStringList('date', taskDateAsStrings);
+}
+
+void addTask(String task) {
+  taskData.add(task);
+  taskDate.add(task);
+  storeData();
+}
+
+void removeTask(int index) {
+  taskData.removeAt(index);
+  taskDate.removeAt(index);
+  storeData();
+}
 
 var selectedDate = DateTime.now().obs;
 var stringDate =
@@ -34,7 +55,17 @@ class CreateNewTask extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      onPressed: () => Get.toNamed(RouteName.dashboard),
+                      onPressed: () {
+                        Get.toNamed(RouteName.dashboard);
+                        // Get.back();
+                        // Navigator.pop(context);
+
+                        titleController.text = '';
+                        selectedDate.value = DateTime.now();
+                        stringDate.value =
+                            '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
+                      },
+
                       child: textSecondary15('Cancel')),
                 ],
               ),
@@ -60,17 +91,17 @@ class CreateNewTask extends StatelessWidget {
                             const BorderSide(color: Colors.white60, width: 1))),
               ),
               SizedBox(height: 25.h),
-              TextFormField(
-                style: const TextStyle(color: Colors.white),
-                maxLines: 5,
-                decoration: InputDecoration(
-                    hintText: 'Description',
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide:
-                            const BorderSide(color: Colors.white60, width: 1))),
-              ),
+              // TextFormField(
+              //   style: const TextStyle(color: Colors.white),
+              //   maxLines: 5,
+              //   decoration: InputDecoration(
+              //       hintText: 'Description',
+              //       hintStyle: const TextStyle(color: Colors.white54),
+              //       border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(10),
+              //           borderSide:
+              //               const BorderSide(color: Colors.white60, width: 1))),
+              // ),
               SizedBox(height: 25.h),
               textWhite20('Select Date'),
               SizedBox(height: 10.h),
@@ -94,14 +125,17 @@ class CreateNewTask extends StatelessWidget {
               ),
               SizedBox(height: 35.h),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   final FormState? form = formKey.currentState;
                   if (form != null && form.validate()) {
                     var titleValue = titleController.text.obs;
                     taskData.value = List.from(taskData)..add(titleValue);
                     taskDate.value = List.from(taskDate)..add(stringDate.value);
                     Get.toNamed(RouteName.dashboard);
+                    // Get.back();
+                    // Navigator.pop(context);
                     titleController.text = '';
+                    storeData();
                   }
                 },
                 child: Container(
