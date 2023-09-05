@@ -65,6 +65,7 @@ class CreateNewTask extends StatelessWidget {
                         stringDate.value =
                             '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
                       },
+
                       child: textSecondary15('Cancel')),
                 ],
               ),
