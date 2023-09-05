@@ -34,7 +34,7 @@ class CreateNewTask extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                      onPressed: () => Get.back(),
+                      onPressed: () => Get.toNamed(RouteName.dashboard),
                       child: textSecondary15('Cancel')),
                 ],
               ),
@@ -87,9 +87,7 @@ class CreateNewTask extends StatelessWidget {
                           decoration: BoxDecoration(
                               color: Colors.grey[600],
                               borderRadius: BorderRadius.circular(10)),
-                          child: textWhite16(stringDate.value
-                              //  == '' ? '${DateTime.now()}' : stringDate.value
-                              )),
+                          child: textWhite16(stringDate.value)),
                     ),
                   ),
                 ],
