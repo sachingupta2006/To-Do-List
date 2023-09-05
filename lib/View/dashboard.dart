@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Routes/routes_name.dart';
-import 'package:to_do_list/View/edit_task.dart';
 import '../Utils/text.dart';
 import 'create_new_task.dart';
 
@@ -20,7 +19,7 @@ class Dashboard extends StatelessWidget {
         return await Get.defaultDialog(
             buttonColor: AppColors.primary,
             backgroundColor: Colors.white,
-            contentPadding: EdgeInsets.all(10.h),
+            contentPadding: EdgeInsets.all(25.h),
             confirm: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -115,7 +114,7 @@ class Dashboard extends StatelessWidget {
             Get.defaultDialog(
               buttonColor: AppColors.primary,
               backgroundColor: Colors.white,
-              contentPadding: EdgeInsets.all(10.h),
+              contentPadding: EdgeInsets.all(25.h),
               content: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -134,7 +133,7 @@ class Dashboard extends StatelessWidget {
                         Get.defaultDialog(
                             buttonColor: AppColors.primary,
                             backgroundColor: Colors.white,
-                            contentPadding: EdgeInsets.all(10.h),
+                            contentPadding: EdgeInsets.all(25.h),
                             confirm: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
