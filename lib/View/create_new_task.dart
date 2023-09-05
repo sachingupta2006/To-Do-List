@@ -15,9 +15,9 @@ void storeData() async {
   await prefs.setStringList('date', taskDateAsStrings);
 }
 
-void addTask(String task) {
-  taskData.add(task);
-  taskDate.add(task);
+void addTask(String title, String date) {
+  taskData.add(title);
+  taskDate.add(date);
   storeData();
 }
 
@@ -128,8 +128,9 @@ class CreateNewTask extends StatelessWidget {
                   final FormState? form = formKey.currentState;
                   if (form != null && form.validate()) {
                     var titleValue = titleController.text.obs;
-                    taskData.value = List.from(taskData)..add(titleValue);
-                    taskDate.value = List.from(taskDate)..add(stringDate.value);
+                    // taskData.value = List.from(taskData)..add(titleValue);
+                    // taskDate.value = List.from(taskDate)..add(stringDate.value);
+                    addTask(titleValue.value, stringDate.value);
                     Get.toNamed(RouteName.dashboard);
                     // Get.back();
                     // Navigator.pop(context);

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Routes/routes_name.dart';
 import '../Utils/text.dart';
+import 'create_new_task.dart';
 
 RxList taskData = [].obs;
 var taskDate = [].obs;
@@ -142,8 +143,9 @@ class Dashboard extends StatelessWidget {
                                     child: textBlue15('Cancel')),
                                 GestureDetector(
                                     onTap: () {
-                                      taskData.removeAt(index);
-                                      taskDate.removeAt(index);
+                                      removeTask(index);
+                                      // taskData.removeAt(index);
+                                      // taskDate.removeAt(index);
                                       Get.back();
                                       Get.back();
                                     },
