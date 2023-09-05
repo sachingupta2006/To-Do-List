@@ -13,58 +13,62 @@ class Setting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        elevation: 0,
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: Scaffold(
         backgroundColor: AppColors.primary,
-        title: textSecondary30w600('Settings'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 20.h),
-            GestureDetector(
-              onTap: () {
-                Get.defaultDialog(
-                    buttonColor: AppColors.primary,
-                    backgroundColor: Colors.white,
-                    contentPadding: EdgeInsets.all(10.h),
-                    confirm: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                            onTap: () => Get.back(),
-                            child: textBlue15('Cancel')),
-                        GestureDetector(
-                            onTap: () {
-                              taskData.clear();
-                              taskDate.clear();
-                              storeData();
-                              Get.toNamed(RouteName.dashboard);
-                              
-                            },
-                            child: textRed15('Confirm')),
-                      ],
-                    ),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        textSecondary15(
-                            'Are you sure you want to clear the data ?')
-                      ],
-                    ));
-              },
-              child: Container(
-                  width: double.infinity,
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 7.h),
-                  child: textWhite20('Clear Data')),
-            ),
-            SizedBox(height: 30.h)
-          ],
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: AppColors.primary,
+          title: textSecondary30w600('Settings'),
+        ),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20.h),
+              GestureDetector(
+                onTap: () {
+                  Get.defaultDialog(
+                      buttonColor: AppColors.primary,
+                      backgroundColor: Colors.white,
+                      contentPadding: EdgeInsets.all(25.h),
+                      confirm: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                              onTap: () => Get.back(),
+                              child: textBlue15('Cancel')),
+                          GestureDetector(
+                              onTap: () {
+                                taskData.clear();
+                                taskDate.clear();
+                                storeData();
+                                Get.toNamed(RouteName.dashboard);
+                              },
+                              child: textRed15('Confirm')),
+                        ],
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          textSecondary15(
+                              'Are you sure you want to clear the data ?')
+                        ],
+                      ));
+                },
+                child: Container(
+                    width: double.infinity,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 7.h),
+                    child: textWhite20('Clear Data')),
+              ),
+              SizedBox(height: 30.h)
+            ],
+          ),
         ),
       ),
     );
