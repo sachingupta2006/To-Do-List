@@ -6,7 +6,7 @@ import 'package:to_do_list/Routes/routes_name.dart';
 import '../Utils/text.dart';
 import 'create_new_task.dart';
 
-RxList taskData = [].obs;
+var taskData = [].obs;
 var taskDate = [].obs;
 
 class Dashboard extends StatelessWidget {
@@ -16,7 +16,7 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.defaultDialog(
+        return await Get.defaultDialog(
             buttonColor: AppColors.primary,
             backgroundColor: Colors.white,
             contentPadding: EdgeInsets.all(10.h),
@@ -24,11 +24,14 @@ class Dashboard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                    onTap: () => Get.back(), child: textBlue15('Cancel')),
-                GestureDetector(
                     onTap: () {
                       Get.back();
-                      Get.back();
+                      false;
+                    },
+                    child: textBlue15('Cancel')),
+                GestureDetector(
+                    onTap: () {
+                      true;
                     },
                     child: textRed15('Confirm')),
               ],
@@ -37,7 +40,7 @@ class Dashboard extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [textSecondary15('Are you sure you want to exit ?')],
             ));
-        return false;
+        // return false;
       },
       child: Scaffold(
         backgroundColor: AppColors.primary,
@@ -58,16 +61,6 @@ class Dashboard extends StatelessWidget {
               SizedBox(width: 10.w),
             ]),
         body: body(),
-        // bottomNavigationBar: Column(
-        //   mainAxisSize: MainAxisSize.min,
-        //   children: [
-        //     SizedBox(height: 10.h),
-        //     TabBar(
-        //         tabs: [textWhite16('Home'), textWhite16('Settings')],
-        //         indicatorColor: Colors.transparent),
-        //     SizedBox(height: 10.h)
-        //   ],
-        // ),
       ),
     );
   }

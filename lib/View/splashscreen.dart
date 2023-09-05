@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Routes/routes_name.dart';
+import 'package:to_do_list/Utils/text.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: SafeArea(
           child: Center(
-        child: Text('To-Do List'),
+        child: textSecondary30w600('To-Do List'),
       )),
     );
   }
