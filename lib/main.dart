@@ -28,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     final taskList = prefs.getStringList('items') ?? [];
     final taskList2 = prefs.getStringList('date') ?? [];
     taskData.assignAll(taskList);
-    taskData.assignAll(taskList2);
+    taskDate.assignAll(taskList2);
   }
 
   @override
