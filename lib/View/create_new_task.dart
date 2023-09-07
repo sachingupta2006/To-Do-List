@@ -103,7 +103,7 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                     if (widget.editTitle == null) {
                       var titleValue = titleController.text.obs;
                       homeController.addTask(
-                          titleValue.value, stringDate.value);
+                          titleValue.value, stringDate.value, false);
                     } else {
                       var titleValue = titleController.text.obs;
 
