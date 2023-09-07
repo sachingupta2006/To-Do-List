@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/Utils/colors.dart';
-import '../Routes/routes_name.dart';
 import '../Utils/text.dart';
 import 'dashboard.dart';
 
@@ -42,119 +41,110 @@ class CreateNewTask extends StatelessWidget {
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.primary,
-        body: SafeArea(
-            child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Get.toNamed(RouteName.dashboard);
-                          // Get.back();
-                          // Navigator.pop(context);
+    return Scaffold(
+      backgroundColor: AppColors.primary,
+      body: SafeArea(
+          child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        physics: const BouncingScrollPhysics(),
+        child: Form(
+          key: formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Get.back();
 
-                          titleController.text = '';
-                          selectedDate.value = DateTime.now();
-                          stringDate.value =
-                              '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
-                        },
-                        child: textSecondary15('Cancel')),
-                  ],
-                ),
-                SizedBox(height: 15.h),
-                textSecondary30w600(
-                    editTitle != null ? 'Update Task' : 'Create New Task'),
-                SizedBox(height: 25.h),
-                TextFormField(
-                  validator: (value) {
-                    if (value == '') {
-                      return 'Please enter title';
-                    }
-                    return null;
-                  },
-                  controller: titleController,
-                  autofocus: true,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                      hintText: editTitle ?? 'Task title',
-                      hintStyle: const TextStyle(color: Colors.white54),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                              color: Colors.white60, width: 1))),
-                ),
-                SizedBox(height: 50.h),
-                textWhite20('Select Date'),
-                SizedBox(height: 10.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        presentDatePicker(context);
+                        titleController.text = '';
+                        selectedDate.value = DateTime.now();
+                        stringDate.value =
+                            '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
                       },
-                      child: Obx(
-                        () => Container(
-                            padding: EdgeInsets.all(10.h),
-                            decoration: BoxDecoration(
-                                color: Colors.grey[600],
-                                borderRadius: BorderRadius.circular(10)),
-                            child: textWhite16(stringDate.value)),
-                      ),
+                      child: textSecondary15('Cancel')),
+                ],
+              ),
+              SizedBox(height: 15.h),
+              textSecondary30w600(
+                  editTitle != null ? 'Update Task' : 'Create New Task'),
+              SizedBox(height: 25.h),
+              TextFormField(
+                validator: (value) {
+                  if (value == '') {
+                    return 'Please enter title';
+                  }
+                  return null;
+                },
+                controller: titleController,
+                autofocus: true,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                    hintText: editTitle ?? 'Task title',
+                    hintStyle: const TextStyle(color: Colors.white54),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide:
+                            const BorderSide(color: Colors.white60, width: 1))),
+              ),
+              SizedBox(height: 50.h),
+              textWhite20('Select Date'),
+              SizedBox(height: 10.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      presentDatePicker(context);
+                    },
+                    child: Obx(
+                      () => Container(
+                          padding: EdgeInsets.all(10.h),
+                          decoration: BoxDecoration(
+                              color: Colors.grey[600],
+                              borderRadius: BorderRadius.circular(10)),
+                          child: textWhite16(stringDate.value)),
                     ),
-                  ],
-                ),
-                SizedBox(height: 35.h),
-                GestureDetector(
-                  onTap: () async {
-                    final FormState? form = formKey.currentState;
-                    if (form != null && form.validate()) {
-                      if (editTitle == null) {
-                        var titleValue = titleController.text.obs;
-                        addTask(titleValue.value, stringDate.value);
-                      } else {
-                        var titleValue = titleController.text.obs;
+                  ),
+                ],
+              ),
+              SizedBox(height: 35.h),
+              GestureDetector(
+                onTap: () async {
+                  final FormState? form = formKey.currentState;
+                  if (form != null && form.validate()) {
+                    if (editTitle == null) {
+                      var titleValue = titleController.text.obs;
+                      addTask(titleValue.value, stringDate.value);
+                    } else {
+                      var titleValue = titleController.text.obs;
 
-                        taskData[editIndex!] = titleValue.value;
-                        taskDate[editIndex!] = stringDate.value;
-                        storeData();
-                      }
-
-                      Get.toNamed(RouteName.dashboard);
-                      // Get.back();
-                      titleController.text = '';
+                      taskData[editIndex!] = titleValue.value;
+                      taskDate[editIndex!] = stringDate.value;
                       storeData();
                     }
-                  },
-                  child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(15.h),
-                      decoration: BoxDecoration(
-                          color: Colors.teal,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Center(
-                          child: textWhite20(editTitle != null
-                              ? 'Update Task'
-                              : 'Create Task'))),
-                )
-              ],
-            ),
+                    Get.back();
+                    titleController.text = '';
+                    storeData();
+                  }
+                },
+                child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(15.h),
+                    decoration: BoxDecoration(
+                        color: Colors.teal,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Center(
+                        child: textWhite20(editTitle != null
+                            ? 'Update Task'
+                            : 'Create Task'))),
+              )
+            ],
           ),
-        )),
-      ),
+        ),
+      )),
     );
   }
 

@@ -53,11 +53,11 @@ class Dashboard extends StatelessWidget {
                 IconThemeData(size: 30.sp, color: AppColors.secondary),
             actions: [
               GestureDetector(
-                  onTap: () => Get.offNamed(RouteName.createNewTask),
+                  onTap: () => Get.toNamed(RouteName.createNewTask),
                   child: const Icon(Icons.add)),
               SizedBox(width: 10.w),
               GestureDetector(
-                  onTap: () => Get.offNamed(RouteName.setting),
+                  onTap: () => Get.toNamed(RouteName.setting),
                   child: const Icon(Icons.settings)),
               SizedBox(width: 10.w),
             ]),
@@ -84,7 +84,7 @@ class Dashboard extends StatelessWidget {
                           backgroundColor:
                               MaterialStatePropertyAll(AppColors.primary)),
                       onPressed: () {
-                        Get.offNamed(RouteName.createNewTask);
+                        Get.toNamed(RouteName.createNewTask);
                       },
                       child: textGreen24w500('Add a Task')),
                   SizedBox(height: 15.h)
@@ -120,8 +120,7 @@ class Dashboard extends StatelessWidget {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        // Get.back();
-                        // navigator.push(MaterialPageRoute(builder: (context) => EditTask(index: index),));
+                        Get.back();
                         Get.to(CreateNewTask(
                           editTitle: taskData[index].toString(),
                           editIndex: index,
@@ -146,8 +145,6 @@ class Dashboard extends StatelessWidget {
                                 GestureDetector(
                                     onTap: () {
                                       removeTask(index);
-                                      // taskData.removeAt(index);
-                                      // taskDate.removeAt(index);
                                       Get.back();
                                       Get.back();
                                     },
