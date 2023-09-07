@@ -3,12 +3,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Utils/text.dart';
+import '../Controller/home_controller.dart';
 
-import 'create_new_task.dart';
-import 'dashboard.dart';
-
-class Setting extends StatelessWidget {
+class Setting extends StatefulWidget {
   const Setting({super.key});
+
+  @override
+  State<Setting> createState() => _SettingState();
+}
+
+class _SettingState extends State<Setting> {
+  HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +44,7 @@ class Setting extends StatelessWidget {
                             child: textBlue15('Cancel')),
                         GestureDetector(
                             onTap: () {
-                              taskData.clear();
-                              taskDate.clear();
-                              storeData();
+                              homeController.clearTask();
                               Get.back();
                               Get.back();
                             },

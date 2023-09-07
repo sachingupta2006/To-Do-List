@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:to_do_list/Controller/home_controller.dart';
 import 'Routes/routes.dart';
-import 'View/dashboard.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,6 +17,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  HomeController homeController = Get.put(HomeController());
   @override
   void initState() {
     super.initState();
@@ -27,8 +28,8 @@ class _MyAppState extends State<MyApp> {
     final prefs = await SharedPreferences.getInstance();
     final taskList = prefs.getStringList('items') ?? [];
     final taskList2 = prefs.getStringList('date') ?? [];
-    taskData.assignAll(taskList);
-    taskDate.assignAll(taskList2);
+    homeController.taskData.assignAll(taskList);
+    homeController.taskDate.assignAll(taskList2);
   }
 
   @override

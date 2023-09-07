@@ -1,41 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/Utils/colors.dart';
+import '../Controller/home_controller.dart';
 import '../Utils/text.dart';
-import 'dashboard.dart';
 
-void storeData() async {
-  final prefs = await SharedPreferences.getInstance();
-  final taskDataAsStrings = taskData.map((task) => task.toString()).toList();
-  final taskDateAsStrings = taskDate.map((task) => task.toString()).toList();
-  await prefs.setStringList('items', taskDataAsStrings);
-  await prefs.setStringList('date', taskDateAsStrings);
-}
-
-void addTask(String title, String date) {
-  taskData.add(title);
-  taskDate.add(date);
-  storeData();
-}
-
-void removeTask(int index) {
-  taskData.removeAt(index);
-  taskDate.removeAt(index);
-  storeData();
-}
-
-var selectedDate = DateTime.now().obs;
-var stringDate =
-    '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}'
-        .obs;
-TextEditingController titleController = TextEditingController();
-
-class CreateNewTask extends StatelessWidget {
+class CreateNewTask extends StatefulWidget {
   const CreateNewTask({super.key, this.editTitle, this.editIndex});
   final String? editTitle;
   final int? editIndex;
+
+  @override
+  State<CreateNewTask> createState() => _CreateNewTaskState();
+}
+
+var selectedDate = DateTime.now();
+
+class _CreateNewTaskState extends State<CreateNewTask> {
+  TextEditingController titleController = TextEditingController();
+  var stringDate =
+      '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}'
+          .obs;
+  HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -58,18 +44,17 @@ class CreateNewTask extends StatelessWidget {
                   TextButton(
                       onPressed: () {
                         Get.back();
-
                         titleController.text = '';
-                        selectedDate.value = DateTime.now();
+                        selectedDate = DateTime.now();
                         stringDate.value =
-                            '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
+                            '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}';
                       },
                       child: textSecondary15('Cancel')),
                 ],
               ),
               SizedBox(height: 15.h),
               textSecondary30w600(
-                  editTitle != null ? 'Update Task' : 'Create New Task'),
+                  widget.editTitle != null ? 'Update Task' : 'Create New Task'),
               SizedBox(height: 25.h),
               TextFormField(
                 validator: (value) {
@@ -82,7 +67,7 @@ class CreateNewTask extends StatelessWidget {
                 autofocus: true,
                 style: const TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                    hintText: editTitle ?? 'Task title',
+                    hintText: widget.editTitle ?? 'Task title',
                     hintStyle: const TextStyle(color: Colors.white54),
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
@@ -115,19 +100,25 @@ class CreateNewTask extends StatelessWidget {
                 onTap: () async {
                   final FormState? form = formKey.currentState;
                   if (form != null && form.validate()) {
-                    if (editTitle == null) {
+                    if (widget.editTitle == null) {
                       var titleValue = titleController.text.obs;
-                      addTask(titleValue.value, stringDate.value);
+                      homeController.addTask(
+                          titleValue.value, stringDate.value);
                     } else {
                       var titleValue = titleController.text.obs;
 
-                      taskData[editIndex!] = titleValue.value;
-                      taskDate[editIndex!] = stringDate.value;
-                      storeData();
+                      homeController.taskData[widget.editIndex!] =
+                          titleValue.value;
+                      homeController.taskDate[widget.editIndex!] =
+                          stringDate.value;
+                      homeController.storeData();
                     }
                     Get.back();
                     titleController.text = '';
-                    storeData();
+                    homeController.storeData();
+                    selectedDate = DateTime.now();
+                    stringDate.value =
+                        '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}';
                   }
                 },
                 child: Container(
@@ -137,7 +128,7 @@ class CreateNewTask extends StatelessWidget {
                         color: Colors.teal,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
-                        child: textWhite20(editTitle != null
+                        child: textWhite20(widget.editTitle != null
                             ? 'Update Task'
                             : 'Create Task'))),
               )
@@ -174,9 +165,9 @@ class CreateNewTask extends StatelessWidget {
       if (pickedDate == null) {
         return;
       }
-      selectedDate.value = pickedDate;
+      selectedDate = pickedDate;
       stringDate.value =
-          "${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}";
     });
   }
 }
