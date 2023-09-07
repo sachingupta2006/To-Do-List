@@ -4,11 +4,17 @@ import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Utils/text.dart';
 
-import 'create_new_task.dart';
-import 'dashboard.dart';
+import '../Controller/home_controller.dart';
 
-class Setting extends StatelessWidget {
+class Setting extends StatefulWidget {
   const Setting({super.key});
+
+  @override
+  State<Setting> createState() => _SettingState();
+}
+
+class _SettingState extends State<Setting> {
+  HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +45,9 @@ class Setting extends StatelessWidget {
                             child: textBlue15('Cancel')),
                         GestureDetector(
                             onTap: () {
-                              taskData.clear();
-                              taskDate.clear();
-                              storeData();
+                              homeController.taskData.clear();
+                              homeController.taskDate.clear();
+                              homeController.storeData();
                               Get.back();
                               Get.back();
                             },

@@ -3,14 +3,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Routes/routes_name.dart';
+import '../Controller/home_controller.dart';
 import '../Utils/text.dart';
 import 'create_new_task.dart';
 
-var taskData = [].obs;
-var taskDate = [].obs;
-
-class Dashboard extends StatelessWidget {
+class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
+
+  @override
+  State<Dashboard> createState() => _DashboardState();
+}
+
+class _DashboardState extends State<Dashboard> {
+  HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -67,11 +72,11 @@ class Dashboard extends StatelessWidget {
   }
 
   Widget body() {
-    return Obx(
-      () => Container(
+    return GetBuilder<HomeController>(builder: (controller) {
+      return Container(
         color: Colors.grey[600],
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: taskData.isEmpty
+        child: homeController.taskData.isEmpty
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -92,13 +97,13 @@ class Dashboard extends StatelessWidget {
               )
             : ListView.separated(
                 itemBuilder: (context, index) {
-                  return taskRow(taskData[index].toString(),
-                      taskDate[index].toString(), index);
+                  return taskRow(homeController.taskData[index].toString(),
+                      homeController.taskDate[index].toString(), index);
                 },
                 separatorBuilder: (context, index) => SizedBox(height: 10.h),
-                itemCount: taskData.length),
-      ),
-    );
+                itemCount: homeController.taskData.length),
+      );
+    });
   }
 
   Widget taskRow(String txt, String date, index) {
@@ -122,7 +127,7 @@ class Dashboard extends StatelessWidget {
                       onTap: () {
                         Get.back();
                         Get.to(CreateNewTask(
-                          editTitle: taskData[index].toString(),
+                          editTitle: homeController.taskData[index].toString(),
                           editIndex: index,
                         ));
                       },
@@ -144,7 +149,7 @@ class Dashboard extends StatelessWidget {
                                     child: textBlue15('Cancel')),
                                 GestureDetector(
                                     onTap: () {
-                                      removeTask(index);
+                                      homeController.removeTask(index);
                                       Get.back();
                                       Get.back();
                                     },
