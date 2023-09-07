@@ -5,12 +5,6 @@ import 'package:to_do_list/Utils/colors.dart';
 import '../Controller/home_controller.dart';
 import '../Utils/text.dart';
 
-var selectedDate = DateTime.now().obs;
-var stringDate =
-    '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}'
-        .obs;
-TextEditingController titleController = TextEditingController();
-
 class CreateNewTask extends StatefulWidget {
   const CreateNewTask({super.key, this.editTitle, this.editIndex});
   final String? editTitle;
@@ -20,7 +14,13 @@ class CreateNewTask extends StatefulWidget {
   State<CreateNewTask> createState() => _CreateNewTaskState();
 }
 
+var selectedDate = DateTime.now();
+
 class _CreateNewTaskState extends State<CreateNewTask> {
+  TextEditingController titleController = TextEditingController();
+  var stringDate =
+      '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}'
+          .obs;
   HomeController homeController = Get.put(HomeController());
 
   @override
@@ -45,9 +45,9 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                       onPressed: () {
                         Get.back();
                         titleController.text = '';
-                        selectedDate.value = DateTime.now();
+                        selectedDate = DateTime.now();
                         stringDate.value =
-                            '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
+                            '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}';
                       },
                       child: textSecondary15('Cancel')),
                 ],
@@ -116,9 +116,9 @@ class _CreateNewTaskState extends State<CreateNewTask> {
                     Get.back();
                     titleController.text = '';
                     homeController.storeData();
-                    selectedDate.value = DateTime.now();
+                    selectedDate = DateTime.now();
                     stringDate.value =
-                        '${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}';
+                        '${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}';
                   }
                 },
                 child: Container(
@@ -165,9 +165,9 @@ class _CreateNewTaskState extends State<CreateNewTask> {
       if (pickedDate == null) {
         return;
       }
-      selectedDate.value = pickedDate;
+      selectedDate = pickedDate;
       stringDate.value =
-          "${selectedDate.value.day.toString()}/${selectedDate.value.month.toString().padLeft(2, '0')}/${selectedDate.value.year.toString().padLeft(2, '0')}";
+          "${selectedDate.day.toString()}/${selectedDate.month.toString().padLeft(2, '0')}/${selectedDate.year.toString().padLeft(2, '0')}";
     });
   }
 }

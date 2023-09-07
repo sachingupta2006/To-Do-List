@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Utils/text.dart';
-
 import '../Controller/home_controller.dart';
 
 class Setting extends StatefulWidget {
@@ -45,9 +44,7 @@ class _SettingState extends State<Setting> {
                             child: textBlue15('Cancel')),
                         GestureDetector(
                             onTap: () {
-                              homeController.taskData.clear();
-                              homeController.taskDate.clear();
-                              homeController.storeData();
+                              homeController.clearTask();
                               Get.back();
                               Get.back();
                             },

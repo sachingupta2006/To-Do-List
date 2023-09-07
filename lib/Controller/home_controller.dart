@@ -30,4 +30,11 @@ class HomeController extends GetxController {
     storeData();
     update();
   }
+
+  void clearTask() {
+    _taskData.clear();
+    _taskDate.clear();
+    storeData();
+    update();
+  }
 }

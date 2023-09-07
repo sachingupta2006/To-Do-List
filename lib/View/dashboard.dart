@@ -95,12 +95,11 @@ class _DashboardState extends State<Dashboard> {
                   SizedBox(height: 15.h)
                 ],
               )
-            : ListView.separated(
+            : ListView.builder(
                 itemBuilder: (context, index) {
                   return taskRow(homeController.taskData[index].toString(),
                       homeController.taskDate[index].toString(), index);
                 },
-                separatorBuilder: (context, index) => SizedBox(height: 10.h),
                 itemCount: homeController.taskData.length),
       );
     });
@@ -108,136 +107,113 @@ class _DashboardState extends State<Dashboard> {
 
   Widget taskRow(String txt, String date, index) {
     RxBool completed = false.obs;
-    return Column(
-      children: [
-        SizedBox(height: 10.h),
-        GestureDetector(
-          onTap: () {
-            completed.value = !completed.value;
-          },
-          onLongPress: () {
-            Get.defaultDialog(
-              buttonColor: AppColors.primary,
-              backgroundColor: Colors.white,
-              contentPadding: EdgeInsets.all(25.h),
-              content: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        Get.back();
-                        Get.to(CreateNewTask(
-                          editTitle: homeController.taskData[index].toString(),
-                          editIndex: index,
-                        ));
-                      },
-                      child: textBlue15('Edit Task')),
-                  GestureDetector(
-                      onTap: () {
-                        Get.defaultDialog(
-                            buttonColor: AppColors.primary,
-                            backgroundColor: Colors.white,
-                            contentPadding: EdgeInsets.all(25.h),
-                            confirm: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                    onTap: () {
-                                      Get.back();
-                                      Get.back();
-                                    },
-                                    child: textBlue15('Cancel')),
-                                GestureDetector(
-                                    onTap: () {
-                                      homeController.removeTask(index);
-                                      Get.back();
-                                      Get.back();
-                                    },
-                                    child: textRed15('Confirm')),
-                              ],
-                            ),
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                textSecondary15(
-                                    'Are you sure you want to Delete this task ?')
-                              ],
-                            ));
-                      },
-                      child: textRed15('Delete Task')),
-                ],
-              ),
-            );
-          },
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            width: double.infinity,
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(6),
-              boxShadow: const [
-                BoxShadow(
-                  color: Color(0x3F717171),
-                  blurRadius: 4,
-                  offset: Offset(0, 2),
-                  spreadRadius: 0,
-                )
-              ],
-            ),
-            child: Obx(() => Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 21.h,
-                          height: 21.h,
-                          decoration: ShapeDecoration(
-                            color: completed.value
-                                ? AppColors.secondary
-                                : Colors.white,
-                            shape: const OvalBorder(
-                              side: BorderSide(
-                                  width: 0.8, color: Color(0xFFEE3764)),
-                            ),
+    return GestureDetector(
+      onTap: () {
+        completed.value = !completed.value;
+      },
+      onLongPress: () {
+        Get.defaultDialog(
+            buttonColor: AppColors.primary,
+            backgroundColor: Colors.white,
+            contentPadding: EdgeInsets.all(25.h),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                    onTap: () {
+                      Get.back();
+                      Get.to(CreateNewTask(
+                        editTitle: homeController.taskData[index].toString(),
+                        editIndex: index,
+                      ));
+                    },
+                    child: textBlue15('Edit Task')),
+                GestureDetector(
+                    onTap: () {
+                      Get.defaultDialog(
+                          buttonColor: AppColors.primary,
+                          backgroundColor: Colors.white,
+                          contentPadding: EdgeInsets.all(25.h),
+                          confirm: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    Get.back();
+                                    Get.back();
+                                  },
+                                  child: textBlue15('Cancel')),
+                              GestureDetector(
+                                  onTap: () {
+                                    homeController.removeTask(index);
+                                    Get.back();
+                                    Get.back();
+                                  },
+                                  child: textRed15('Confirm')),
+                            ],
                           ),
-                          child: Center(
-                              child: Icon(
-                            Icons.check_outlined,
-                            size: 15.h,
-                            color: Colors.white,
-                          )),
-                        ),
-                        SizedBox(width: 16.w),
-                        Text(
-                          txt,
-                          style: TextStyle(
-                              decoration: completed.value
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              fontSize: 15.sp,
-                              color: AppColors.secondary,
-                              fontWeight: FontWeight.w400),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      date,
-                      style: TextStyle(
-                          decoration: completed.value
-                              ? TextDecoration.lineThrough
-                              : TextDecoration.none,
-                          fontSize: 15.sp,
-                          color: AppColors.secondary,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                )),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              textSecondary15(
+                                  'Are you sure you want to Delete this task ?')
+                            ],
+                          ));
+                    },
+                    child: textRed15('Delete Task')),
+              ],
+            ));
+      },
+      child: Obx(
+        () => Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
+          margin: EdgeInsets.symmetric(vertical: 10.h),
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: AppColors.primary, borderRadius: BorderRadius.circular(6)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                width: 21.h,
+                height: 21.h,
+                decoration: ShapeDecoration(
+                  color: completed.value ? AppColors.secondary : Colors.white,
+                  shape: const OvalBorder(
+                    side: BorderSide(width: 0.8, color: Color(0xFFEE3764)),
+                  ),
+                ),
+                child: Center(
+                    child: Icon(Icons.check_outlined,
+                        size: 15.h, color: Colors.white)),
+              ),
+              SizedBox(width: 16.w),
+              Flexible(
+                flex: 4,
+                child: Text(txt,
+                    style: TextStyle(
+                        decoration: completed.value
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                        fontSize: 15.sp,
+                        color: AppColors.secondary,
+                        fontWeight: FontWeight.w400)),
+              ),
+              Spacer(),
+              Text(
+                date,
+                style: TextStyle(
+                    decoration: completed.value
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    fontSize: 15.sp,
+                    color: AppColors.secondary,
+                    fontWeight: FontWeight.w400),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 10.h)
-      ],
+      ),
     );
   }
 }
