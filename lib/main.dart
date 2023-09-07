@@ -28,8 +28,10 @@ class _MyAppState extends State<MyApp> {
     final prefs = await SharedPreferences.getInstance();
     final taskList = prefs.getStringList('items') ?? [];
     final taskList2 = prefs.getStringList('date') ?? [];
+    final taskList3 = prefs.getStringList('bool') ?? [];
     homeController.taskData.assignAll(taskList);
     homeController.taskDate.assignAll(taskList2);
+    homeController.taskBool.assignAll(taskList3);
   }
 
   @override

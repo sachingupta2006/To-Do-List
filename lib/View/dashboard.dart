@@ -97,19 +97,22 @@ class _DashboardState extends State<Dashboard> {
               )
             : ListView.builder(
                 itemBuilder: (context, index) {
-                  return taskRow(homeController.taskData[index].toString(),
-                      homeController.taskDate[index].toString(), index);
+                  return taskRow(
+                      homeController.taskData[index].toString(),
+                      homeController.taskDate[index].toString(),
+                      index,
+                      homeController.taskBool[index] == 'true' ? true : false);
                 },
                 itemCount: homeController.taskData.length),
       );
     });
   }
 
-  Widget taskRow(String txt, String date, index) {
-    RxBool completed = false.obs;
+  Widget taskRow(String txt, String date, index, bool bool) {
     return GestureDetector(
       onTap: () {
-        completed.value = !completed.value;
+        homeController.taskBool[index] = true;
+        homeController.storeData();
       },
       onLongPress: () {
         Get.defaultDialog(
@@ -164,54 +167,56 @@ class _DashboardState extends State<Dashboard> {
               ],
             ));
       },
-      child: Obx(
-        () => Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
-          margin: EdgeInsets.symmetric(vertical: 10.h),
-          width: double.infinity,
-          decoration: BoxDecoration(
-              color: AppColors.primary, borderRadius: BorderRadius.circular(6)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 21.h,
-                height: 21.h,
-                decoration: ShapeDecoration(
-                  color: completed.value ? AppColors.secondary : Colors.white,
-                  shape: const OvalBorder(
-                    side: BorderSide(width: 0.8, color: Color(0xFFEE3764)),
-                  ),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
+        margin: EdgeInsets.symmetric(vertical: 10.h),
+        width: double.infinity,
+        decoration: BoxDecoration(
+            color: AppColors.primary, borderRadius: BorderRadius.circular(6)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 21.h,
+              height: 21.h,
+              decoration: ShapeDecoration(
+                color: homeController.taskBool[index].toString() == 'true'
+                    ? AppColors.secondary
+                    : Colors.white,
+                shape: const OvalBorder(
+                  side: BorderSide(width: 0.8, color: Color(0xFFEE3764)),
                 ),
-                child: Center(
-                    child: Icon(Icons.check_outlined,
-                        size: 15.h, color: Colors.white)),
               ),
-              SizedBox(width: 16.w),
-              Flexible(
-                flex: 4,
-                child: Text(txt,
-                    style: TextStyle(
-                        decoration: completed.value
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                        fontSize: 15.sp,
-                        color: AppColors.secondary,
-                        fontWeight: FontWeight.w400)),
-              ),
-              Spacer(),
-              Text(
-                date,
-                style: TextStyle(
-                    decoration: completed.value
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
-                    fontSize: 15.sp,
-                    color: AppColors.secondary,
-                    fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
+              child: Center(
+                  child: Icon(Icons.check_outlined,
+                      size: 15.h, color: Colors.white)),
+            ),
+            SizedBox(width: 16.w),
+            Flexible(
+              flex: 4,
+              child: Text(txt,
+                  style: TextStyle(
+                      decoration:
+                          homeController.taskBool[index].toString() == 'true'
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                      fontSize: 15.sp,
+                      color: AppColors.secondary,
+                      fontWeight: FontWeight.w400)),
+            ),
+            const Spacer(),
+            Text(
+              date,
+              style: TextStyle(
+                  decoration:
+                      homeController.taskBool[index].toString() == 'true'
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                  fontSize: 15.sp,
+                  color: AppColors.secondary,
+                  fontWeight: FontWeight.w400),
+            ),
+          ],
         ),
       ),
     );
