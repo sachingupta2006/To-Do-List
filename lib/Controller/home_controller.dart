@@ -45,4 +45,14 @@ class HomeController extends GetxController {
     storeData();
     update();
   }
+  
+  void loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final taskList = prefs.getStringList('items') ?? [];
+    final taskList2 = prefs.getStringList('date') ?? [];
+    final taskList3 = prefs.getStringList('bool') ?? [];
+    _taskData.assignAll(taskList);
+    _taskBool.assignAll(taskList2);
+    _taskBool.assignAll(taskList3);
+  }
 }

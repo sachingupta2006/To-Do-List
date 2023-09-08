@@ -7,14 +7,6 @@ import 'Routes/routes.dart';
 
 void main() async {
   runApp(const MyApp());
-  final prefs = await SharedPreferences.getInstance();
-  final taskList = prefs.getStringList('items') ?? [];
-  final taskList2 = prefs.getStringList('date') ?? [];
-  final taskList3 = prefs.getStringList('bool') ?? [];
-  HomeController homeController = Get.put(HomeController());
-  homeController.taskData.assignAll(taskList);
-  homeController.taskDate.assignAll(taskList2);
-  homeController.taskBool.assignAll(taskList3);
 }
 
 class MyApp extends StatefulWidget {
@@ -25,13 +17,22 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // @override
-  // void initState() {
-  //   super.initState();
-    // loadData();
-  // }
-  
-  // void loadData() async {}
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  void loadData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final taskList = prefs.getStringList('items') ?? [];
+    final taskList2 = prefs.getStringList('date') ?? [];
+    final taskList3 = prefs.getStringList('bool') ?? [];
+    HomeController homeController = Get.put(HomeController());
+    homeController.taskData.assignAll(taskList);
+    homeController.taskDate.assignAll(taskList2);
+    homeController.taskBool.assignAll(taskList3);
+  }
 
   @override
   Widget build(BuildContext context) {
