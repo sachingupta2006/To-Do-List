@@ -114,7 +114,7 @@ class _DashboardState extends State<Dashboard> {
   Widget taskRow(String txt, String date, index, bool bool) {
     return GestureDetector(
       onTap: () {
-        if (homeController.taskBool[index] != 'true') {
+        if (homeController.taskBool[index].toString() != 'true') {
           Get.defaultDialog(
               buttonColor: AppColors.primary,
               backgroundColor: Colors.white,
@@ -144,9 +144,10 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ));
         } else {
-          Get.snackbar('You have already marked done this task',
+          Get.snackbar(
+              snackPosition: SnackPosition.BOTTOM,
+              'You have already marked done this task',
               'Long press to delete or edit the task');
-          print('qwerty  ${homeController.taskBool[index]}');
         }
       },
       onLongPress: () {
