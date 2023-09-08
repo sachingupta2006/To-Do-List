@@ -16,12 +16,17 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   HomeController homeController = Get.put(HomeController());
+  @override
+  void initState() {
+    super.initState();
+    homeController.storeData();
+  }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return await Get.defaultDialog(
+        var confirmedExit = await Get.defaultDialog(
             buttonColor: AppColors.primary,
             backgroundColor: Colors.white,
             contentPadding: EdgeInsets.all(25.h),
@@ -30,14 +35,12 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Get.back();
-                      false;
+                      Get.back(result: false);
                     },
                     child: textBlue15('Cancel')),
                 GestureDetector(
                     onTap: () {
-                      Get.back();
-                      true;
+                      Get.back(result: true);
                     },
                     child: textRed15('Confirm')),
               ],
@@ -46,7 +49,7 @@ class _DashboardState extends State<Dashboard> {
               mainAxisSize: MainAxisSize.min,
               children: [textSecondary15('Are you sure you want to exit ?')],
             ));
-        // return false;
+        return confirmedExit ?? false;
       },
       child: Scaffold(
         backgroundColor: AppColors.primary,
@@ -111,8 +114,39 @@ class _DashboardState extends State<Dashboard> {
   Widget taskRow(String txt, String date, index, bool bool) {
     return GestureDetector(
       onTap: () {
-        homeController.taskBool[index] = true;
-        homeController.storeData();
+        if (homeController.taskBool[index] != 'true') {
+          Get.defaultDialog(
+              buttonColor: AppColors.primary,
+              backgroundColor: Colors.white,
+              contentPadding: EdgeInsets.all(25.h),
+              confirm: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Get.back(result: false);
+                      },
+                      child: textBlue15('Cancel')),
+                  GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        homeController.taskBool[index] = true;
+                        homeController.storeData();
+                      },
+                      child: textRed15('Confirm')),
+                ],
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  textSecondary15(
+                      'Are you sure you want to mark this task as done ?')
+                ],
+              ));
+        } else {
+          Get.snackbar('You have already marked done this task',
+              'Long press to delete or edit the task');
+        }
       },
       onLongPress: () {
         Get.defaultDialog(

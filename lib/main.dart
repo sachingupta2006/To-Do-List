@@ -5,8 +5,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_list/Controller/home_controller.dart';
 import 'Routes/routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  final prefs = await SharedPreferences.getInstance();
+  final taskList = prefs.getStringList('items') ?? [];
+  final taskList2 = prefs.getStringList('date') ?? [];
+  final taskList3 = prefs.getStringList('bool') ?? [];
+  HomeController homeController = Get.put(HomeController());
+  homeController.taskData.assignAll(taskList);
+  homeController.taskDate.assignAll(taskList2);
+  homeController.taskBool.assignAll(taskList3);
 }
 
 class MyApp extends StatefulWidget {
@@ -17,22 +25,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  HomeController homeController = Get.put(HomeController());
-  @override
-  void initState() {
-    super.initState();
-    loadData();
-  }
-
-  void loadData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final taskList = prefs.getStringList('items') ?? [];
-    final taskList2 = prefs.getStringList('date') ?? [];
-    final taskList3 = prefs.getStringList('bool') ?? [];
-    homeController.taskData.assignAll(taskList);
-    homeController.taskDate.assignAll(taskList2);
-    homeController.taskBool.assignAll(taskList3);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+    // loadData();
+  // }
+  
+  // void loadData() async {}
 
   @override
   Widget build(BuildContext context) {
