@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   void initState() {
     super.initState();
-    homeController.storeData();
+    homeController.loadData();
   }
 
   @override
@@ -146,6 +146,7 @@ class _DashboardState extends State<Dashboard> {
         } else {
           Get.snackbar('You have already marked done this task',
               'Long press to delete or edit the task');
+          print('qwerty  ${homeController.taskBool[index]}');
         }
       },
       onLongPress: () {
