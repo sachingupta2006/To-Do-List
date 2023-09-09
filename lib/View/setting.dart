@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:to_do_list/Routes/routes_name.dart';
 import 'package:to_do_list/Utils/colors.dart';
 import 'package:to_do_list/Utils/text.dart';
 import '../Controller/home_controller.dart';
@@ -61,11 +62,25 @@ class _SettingState extends State<Setting> {
               },
               child: Container(
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(10)),
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 7.h),
                   child: textWhite20('Clear Data')),
             ),
-            SizedBox(height: 30.h)
+            SizedBox(height: 30.h),
+            GestureDetector(
+                onTap: () => Get.toNamed(RouteName.apiScreensList),
+                child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(10)),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 7.h),
+                    child: textWhite20('API Screens'))),
+            SizedBox(height: 20.h)
           ],
         ),
       ),
